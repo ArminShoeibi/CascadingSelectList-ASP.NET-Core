@@ -1,0 +1,107 @@
+﻿@model UpdatePostDto
+@{
+    ViewData["Title"] = "EditPost";
+}
+
+
+<form method="post">
+    <input asp-for="PostId" hidden />
+    <div class="row ">
+        <div class="col-lg-12">
+            <div class="form-floating mb-3">
+                <input asp-for="Title" class="form-control" placeholder=" ">
+                <label asp-for="Title"></label>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-floating mb-3">
+                <textarea rows="7" asp-for="Text" class="form-control" placeholder=" "></textarea>
+                <label asp-for="Text"></label>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <label asp-for="ParentCategoryId"></label>
+            <select asp-for="ParentCategoryId" class="form-select form-select-lg" asp-items="ViewBag.ParentCategories">
+                <option value=""></option>
+            </select>
+            <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="col-lg-6">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" class="form-select form-select-lg" asp-items="ViewBag.ChildCategories">
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="col ">
+            <a asp-action="Index" asp-controller="Posts" class="btn btn-primary">Back to Posts</a>
+        </div>
+        <div class="col text-end">
+            <input type="submit" class="btn btn-success" value="Edit" />
+        </div>
+
+    </div>
+
+</form>
+
+
+@section scripts {
+    <script>
+        $(function () {
+            $('select').select2({
+                placeholder: 'Please Select an Option',
+                allowClear:true,
+            });
+
+            $('#ParentCategoryId').on('select2:clear', function (e) {
+                var childCategories = $('#CategoryId');
+                childCategories.empty();
+                childCategories.prop('disabled',true);
+            });
+
+            $('#ParentCategoryId').on('select2:select', function (e) {
+                let selectedParent = $("#ParentCategoryId option:selected").val();
+
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetChildCategoriesByParentCategoryId", "Categories")' +'/'+ selectedParent,
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    success: function (result) {
+                        var childCategories = $('#CategoryId');
+                        childCategories.empty();
+                        childCategories.prop('disabled', false);
+                        for (var i = 0; i < result.length; i++) {
+                            childCategories.append($('<option/>', {
+                                value: result[i].Value,
+                                text: result[i].Text
+                            }));
+
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+
+
+
+}
+
+
+

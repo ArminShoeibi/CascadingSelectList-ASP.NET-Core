@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row mb-2">
+    <div class="col">
+        <a asp-action="CreateCategory" class="btn btn-primary">Create Category</a>
+    </div>
+    <div class="col text-end">
+        <a asp-action="CreatePost" class="btn btn-outline-warning">Create Post</a>
+    </div>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>Category Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Date Created</th>
+                <th>Date Modified</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <td>@category.CategoryId</td>
+                    <td>
+                        @category.Name &nbsp;
+                        @if (category.ParentCategoryId is not null) // Bad Practice (Use View Models)
+                        {
+                            <span class="badge bg-success">@category.Parent.Name</span>
+                        }
+                    </td>
+                    <td>@category.Description</td>
+                    <td>@category.DateCreated.DateTime</td>
+                    <td>@category.DateModified.DateTime</td>
+                    <td>
+                        <a asp-action="EditCategory" asp-controller="Categories" asp-route-id="@category.CategoryId" class="btn btn-primary">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+

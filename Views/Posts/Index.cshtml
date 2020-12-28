@@ -1,0 +1,48 @@
+﻿@model List<Post> 
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row mb-2">
+    <div class="col">
+        <a asp-action="CreatePost" class="btn btn-primary">Create Post</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>Post Id</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date Created</th>
+                <th>Date Modified</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var post in Model)
+            {
+            <tr>
+                <td>@post.PostId</td>
+                <td>@post.Title</td>
+                <td>
+                    @post.Category.Name &nbsp;   <span class="badge bg-success">@post.Category.Parent.Name</span>
+                </td>
+               
+                <td>@post.DateCreated.DateTime</td>
+                <td>@post.DateModified.DateTime</td>
+                <td>
+                    <a asp-action="EditPost" asp-controller="Posts" asp-route-id="@post.PostId" class="btn btn-primary">Edit</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+
+
+
