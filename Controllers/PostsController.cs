@@ -53,7 +53,9 @@ namespace CascadingSelectList.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
             ViewBag.ParentCategories = await _categoryService.GetParentCategoriesInSelectList();
+            ViewBag.ChildCateogories = await _categoryService.GetChildCategoriesByParentCategoryIdInSelectList(dto.ParentCategoryId);
             return View(dto);
         }
 

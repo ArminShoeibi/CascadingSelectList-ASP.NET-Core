@@ -18,6 +18,7 @@ namespace CascadingSelectList.DTOs.Post
 
 
         [Required]
+        [StringLength(70)]
         public string Title { get; set; }
 
         [Required]

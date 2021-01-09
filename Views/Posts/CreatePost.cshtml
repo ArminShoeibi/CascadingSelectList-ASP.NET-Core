@@ -38,7 +38,7 @@
 
         <div class="col-lg-6">
             <label asp-for="CategoryId"></label>
-            <select asp-for="CategoryId" class="form-select form-select-lg" disabled>
+            <select asp-for="CategoryId" class="form-select form-select-lg" asp-items="ViewBag.ChildCateogories">
             </select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>

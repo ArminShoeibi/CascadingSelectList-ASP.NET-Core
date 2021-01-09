@@ -1,4 +1,5 @@
 ﻿using CascadingSelectList.Data;
+using CascadingSelectList.DTOs.Category;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -15,10 +16,12 @@ namespace CascadingSelectList.Service
             _db = db;
         }
 
-
         public async Task<SelectList> GetParentCategoriesInSelectList()
         {
-            var parentCategories = await _db.Categories.Where(c => c.ParentCategoryId == null).ToListAsync();
+            var parentCategories = await _db.Categories.Where(c => c.ParentCategoryId == null)
+                .Select(c => new { c.CategoryId, c.Name })
+                .ToListAsync();
+
             return new SelectList(parentCategories, "CategoryId", "Name");
         }
 
